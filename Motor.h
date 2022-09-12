@@ -11,3 +11,4 @@ void motor_init(Motor m);
 void motor_forward(Motor m);
 void motor_reverse(Motor m);
 void motor_set_speed(Motor m, uint8_t speedVal);
+void motor_test(Motor m1, Motor m2);

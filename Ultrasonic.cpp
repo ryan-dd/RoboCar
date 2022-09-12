@@ -2,25 +2,25 @@
 
 void ultrasonic_init(Ultrasonic ultra)
 {
-  // No op for now
+  pinMode(ultra.trigPin, OUTPUT);
+  pinMode(ultra.echoPin, INPUT);
 }
 
-unsigned long ultrasonic_get_dist_cm(Ultrasonic ultra)
+long ultrasonic_get_dist_cm(Ultrasonic ultra)
 {
-  // Send trigger for 10 us
-  pinMode(ultra.pin, OUTPUT); 
-  digitalWrite(ultra.pin, LOW);
+  uint8_t trigPin = ultra.trigPin;
+  uint8_t echoPin = ultra.echoPin;
+
+  digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
-
-  digitalWrite(ultra.pin, HIGH);
+  // Set trigPin to HIGH for 10 microseconds
+  digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
-  digitalWrite(ultra.pin, LOW);
-
-  // Get the sound wave travel time in microseconds
-  pinMode(ultra.pin, INPUT); 
-  unsigned long pulseDuration_us = pulseIn(ultra.pin, HIGH);
+  digitalWrite(trigPin, LOW);
+  // Read the echoPin, returns the sound wave travel time in microseconds
+  long duration = pulseIn(echoPin, HIGH);
 
   // cm_travelled = pulseDuration us * 1/1000000 s/us * 343 m/s * 100/1 cm/m;
   // cm_to_target = cm travelled / 2;
-  return 0.01715 * pulseDuration_us;
+  return duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
 }
